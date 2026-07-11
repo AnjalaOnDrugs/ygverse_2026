@@ -1,0 +1,389 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: #08080c;
+  --color-raised: #121218;
+  --color-card: #15151d;
+  --color-line: rgba(247, 154, 175, 0.14);
+  --color-pink: #f79aaf;
+  --color-hot: #ff5c8a;
+  --color-teal: #2cc9b6;
+  --color-ink: #f4f2f5;
+  --color-muted: #8b8794;
+  --font-display: var(--font-unbounded);
+  --font-body: var(--font-schibsted);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #08080c;
+  color: #f4f2f5;
+  font-family: var(--font-schibsted), sans-serif;
+  min-height: 100%;
+}
+
+/* Stage-light atmosphere: two soft beams + grain */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(60% 45% at 20% -10%, rgba(247, 154, 175, 0.16), transparent 70%),
+    radial-gradient(55% 40% at 85% -5%, rgba(44, 201, 182, 0.12), transparent 70%),
+    #08080c;
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.font-display {
+  font-family: var(--font-unbounded), sans-serif;
+}
+
+/* Neon text logo */
+.neon-logo {
+  font-family: var(--font-unbounded), sans-serif;
+  letter-spacing: 0.08em;
+  background: linear-gradient(100deg, #f79aaf 0%, #ff5c8a 45%, #2cc9b6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 18px rgba(255, 92, 138, 0.35));
+}
+
+.glow-pink {
+  box-shadow: 0 0 0 1px rgba(247, 154, 175, 0.35), 0 0 24px rgba(255, 92, 138, 0.25);
+}
+
+.card {
+  background: #15151d;
+  border: 1px solid rgba(247, 154, 175, 0.14);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.btn-neon {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: #08080c;
+  background: linear-gradient(100deg, #f79aaf, #ff5c8a);
+  border-radius: 999px;
+  padding: 0.8rem 1.6rem;
+  transition: filter 0.2s, transform 0.15s;
+  box-shadow: 0 4px 24px rgba(255, 92, 138, 0.35);
+}
+
+.btn-neon:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-neon:active {
+  transform: translateY(0);
+}
+
+.btn-neon:disabled {
+  opacity: 0.5;
+  filter: grayscale(0.4);
+  transform: none;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  color: #f79aaf;
+  border: 1px solid rgba(247, 154, 175, 0.4);
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.8rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-ghost:hover {
+  background: rgba(247, 154, 175, 0.12);
+  border-color: #f79aaf;
+}
+
+.input-dark {
+  width: 100%;
+  background: #121218;
+  border: 1px solid rgba(247, 154, 175, 0.18);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  color: #f4f2f5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-dark::placeholder {
+  color: #8b8794;
+}
+
+.input-dark:focus {
+  outline: none;
+  border-color: #f79aaf;
+  box-shadow: 0 0 0 3px rgba(247, 154, 175, 0.15);
+}
+
+.select-dark {
+  /* Native select chrome misaligns the label against .input-dark siblings,
+     so draw our own chevron and center the text with matching padding. */
+  appearance: none;
+  width: auto;
+  flex-shrink: 0;
+  background: #121218
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%232cc9b6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat right 0.9rem center;
+  background-size: 0.7rem auto;
+  border: 1px solid rgba(247, 154, 175, 0.18);
+  border-radius: 12px;
+  padding: 0.85rem 2.3rem 0.85rem 1rem;
+  color: #2cc9b6;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.select-dark:focus {
+  outline: none;
+  border-color: #f79aaf;
+}
+
+/* Tab pills */
+.tab-pill {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+  color: #8b8794;
+  border: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.tab-pill.active {
+  color: #f79aaf;
+  border-color: rgba(247, 154, 175, 0.45);
+  background: rgba(247, 154, 175, 0.08);
+  box-shadow: 0 0 18px rgba(255, 92, 138, 0.15);
+}
+
+/* Bottom nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(247, 154, 175, 0.16);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0.65rem 0 0.85rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b8794;
+  transition: color 0.2s;
+  flex: 1;
+}
+
+.nav-item.active {
+  color: #f79aaf;
+}
+
+.nav-item.active svg {
+  filter: drop-shadow(0 0 8px rgba(255, 92, 138, 0.6));
+}
+
+/* Modal overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(4, 4, 8, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 0.18s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rise-in {
+  animation: rise-in 0.35s ease-out both;
+}
+
+/* Like button pop */
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.heart-pop {
+  animation: heart-pop 0.3s ease-out;
+}
+
+/* Collection stack: peeking cards behind the cover photo */
+.stack {
+  position: relative;
+}
+
+.stack > .card {
+  position: relative;
+  z-index: 1;
+}
+
+.stack.stack-multi::before,
+.stack.stack-multi::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: #1d1d28;
+  border: 1px solid rgba(247, 154, 175, 0.22);
+}
+
+.stack.stack-multi::before {
+  transform: rotate(2.5deg) translate(5px, 1px);
+}
+
+.stack.stack-multi::after {
+  transform: rotate(-2deg) translate(-4px, 3px);
+  background: #17171f;
+}
+
+.stack-count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(4, 4, 8, 0.75);
+  backdrop-filter: blur(4px);
+  color: #2cc9b6;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Notification bell */
+.bell-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: linear-gradient(100deg, #f79aaf, #ff5c8a);
+  color: #08080c;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(255, 92, 138, 0.5);
+}
+
+.notif-panel {
+  /* Anchored to the sticky header, not the bell button, so the dropdown
+     never hangs past the screen edge on narrow viewports. */
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 1rem;
+  width: min(320px, calc(100vw - 2rem));
+  max-height: 55vh;
+  overflow-y: auto;
+  z-index: 60;
+  animation: rise-in 0.2s ease-out both;
+}
+
+/* Push-style like banner — slides in from the top, small and quiet */
+@keyframes push-in-out {
+  0% { opacity: 0; transform: translate(-50%, -16px); }
+  7% { opacity: 1; transform: translate(-50%, 0); }
+  90% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -12px); }
+}
+
+.push-toast {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(340px, calc(100vw - 2rem));
+  padding: 8px 14px 8px 9px;
+  border-radius: 14px;
+  background: rgba(18, 18, 26, 0.95);
+  border: 1px solid rgba(247, 154, 175, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 92, 138, 0.12);
+  color: #f4f2f5;
+  font-size: 0.8rem;
+  cursor: pointer;
+  animation: push-in-out 4s ease-out both;
+}
+
+.push-toast img {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Upload spinner ring */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(8, 8, 12, 0.3);
+  border-top-color: #08080c;
+  animation: spin 0.7s linear infinite;
+}
+
+.spinner-teal {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(44, 201, 182, 0.2);
+  border-top-color: #2cc9b6;
+  animation: spin 0.7s linear infinite;
+}
