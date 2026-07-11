@@ -41,6 +41,22 @@ export default defineSchema({
     imageId: v.id("images"),
   }).index("by_image", ["imageId"]),
 
+  // Game teams. Points live on the group and are adjusted by organizers
+  // (games:adjustPoints via the dashboard/CLI), not by attendees.
+  groups: defineTable({
+    name: v.string(),
+    points: v.number(),
+    createdBy: v.id("users"),
+  }).index("by_name", ["name"]),
+
+  // One row per member; a user belongs to at most one group at a time.
+  groupMembers: defineTable({
+    groupId: v.id("groups"),
+    userId: v.id("users"),
+  })
+    .index("by_group", ["groupId"])
+    .index("by_user", ["userId"]),
+
   notifications: defineTable({
     userId: v.id("users"), // recipient (photo owner)
     actorId: v.id("users"), // who liked

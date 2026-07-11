@@ -11,6 +11,7 @@
 import type * as admin from "../admin.js";
 import type * as auth from "../auth.js";
 import type * as comments from "../comments.js";
+import type * as games from "../games.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as likes from "../likes.js";
 import type * as notifications from "../notifications.js";
@@ -28,6 +29,7 @@ declare const fullApi: ApiFromModules<{
   admin: typeof admin;
   auth: typeof auth;
   comments: typeof comments;
+  games: typeof games;
   "lib/auth": typeof lib_auth;
   likes: typeof likes;
   notifications: typeof notifications;
