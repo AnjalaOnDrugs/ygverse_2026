@@ -2,7 +2,7 @@
 
 Event app for YGverse: attendees log in with their registration number, share photos in a live feed (single photos or multi-photo collections shown as a stack), like and comment on each individual photo, and get quiet push-style in-app notifications when someone likes their photo. Built with **Next.js** (Vercel) and **Convex** (database, photo storage, real-time updates).
 
-The **Games** (team groupings) and **Vote** (red-carpet idol-look voting) sections are placeholders — the navigation, routing, and auth are already shared infrastructure, so new modules only need their own Convex functions + page.
+The **Games** section handles team groupings with an organizer-scored leaderboard. The **Inspired** section is the red-carpet runway hype meter: while an attendee walks, everyone can tap their heart as many times as they like — every tap counts (taps are batched client-side and stored in sharded counters server-side) and a live "Most inspiring" board ranks the top walkers.
 
 ## Develop locally
 
@@ -35,6 +35,7 @@ Test accounts seeded in dev: `YG001`/`changeme1` (Haris), `YG002`/`changeme2` (M
 - `convex/auth.ts` — `login` / `me` / `logout`. The session token lives in `localStorage` on the client.
 - `convex/posts.ts` — upload URL generation, feed queries, owner-checked cascade delete (images, likes, comments, notifications, storage blobs).
 - `convex/likes.ts` — `toggleLike(imageId)` (creates a notification for the photo owner; unliking retracts it), `likers`.
+- `convex/inspired.ts` — runway hearts: `board` (all attendees with totals) and `like` (batched, unlimited taps; totals sharded across `inspiredCounts` rows to dodge write contention).
 - `convex/comments.ts` — add / list / delete-own, per photo; shown in the full-screen viewer and switching with the carousel.
 - `convex/notifications.ts` — list, unread count, mark-all-read; the client shows a bell with a badge plus a small push-style banner (top of screen, 4 s, tap to dismiss) when a like arrives live.
 - `convex/admin.ts` — `npx convex run admin:wipeContent` clears all posted content (keeps users), handy before the event.

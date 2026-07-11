@@ -57,6 +57,15 @@ export default defineSchema({
     .index("by_group", ["groupId"])
     .index("by_user", ["userId"]),
 
+  // "Inspired" runway hearts. Taps are unlimited by design (every click
+  // counts), so totals are sharded across a few rows per attendee to avoid
+  // write contention when the whole crowd taps the same walker at once.
+  inspiredCounts: defineTable({
+    targetId: v.id("users"),
+    shard: v.number(),
+    count: v.number(),
+  }).index("by_target_and_shard", ["targetId", "shard"]),
+
   notifications: defineTable({
     userId: v.id("users"), // recipient (photo owner)
     actorId: v.id("users"), // who liked

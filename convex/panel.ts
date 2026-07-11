@@ -41,6 +41,46 @@ export const topLiked = query({
   },
 });
 
+// Groups sorted by points, for the panel's Groups tab and the projector
+// leaderboard. Read-only: names, points and member counts only.
+export const groups = query({
+  args: {},
+  handler: async (ctx) => {
+    const groups = await ctx.db.query("groups").take(200);
+    const detailed = await Promise.all(
+      groups.map(async (group) => {
+        const members = await ctx.db
+          .query("groupMembers")
+          .withIndex("by_group", (q) => q.eq("groupId", group._id))
+          .collect();
+        return {
+          groupId: group._id,
+          name: group.name,
+          points: group.points,
+          memberCount: members.length,
+        };
+      })
+    );
+    detailed.sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
+    return detailed;
+  },
+});
+
+// Adjusts a group's score on behalf of the event organizer (points are
+// awarded from the control panel during games). Unauthenticated by choice,
+// same as deletePhoto — the organizer accepts that anyone with the
+// deployment URL could call this.
+export const adjustPoints = mutation({
+  args: { groupId: v.id("groups"), delta: v.number() },
+  handler: async (ctx, { groupId, delta }) => {
+    const group = await ctx.db.get(groupId);
+    if (!group) throw new Error("Group not found");
+    const points = Math.max(0, group.points + delta);
+    await ctx.db.patch(groupId, { points });
+    return { name: group.name, points };
+  },
+});
+
 // Deletes one photo on behalf of the event organizer (moderation from the
 // control panel). Unauthenticated by choice — the organizer accepts that
 // anyone with the deployment URL could call this.
