@@ -108,3 +108,55 @@ export const deletePhoto = mutation({
     if (!remaining) await ctx.db.delete(image.postId);
   },
 });
+
+// Returns all users for the Runway performer dropdown in the control panel.
+export const getInspiredUsers = query({
+  args: {},
+  handler: async (ctx) => {
+    const users = await ctx.db.query("users").collect();
+    return users.map((u) => ({ id: u._id, username: u.username }));
+  },
+});
+
+// Queries the total heart count for a specific Runway performer.
+export const getInspiredCount = query({
+  args: { targetId: v.id("users") },
+  handler: async (ctx, { targetId }) => {
+    const shards = await ctx.db
+      .query("inspiredCounts")
+      .withIndex("by_target_and_shard", (q) => q.eq("targetId", targetId))
+      .collect();
+    let total = 0;
+    for (const shard of shards) {
+      total += shard.count;
+    }
+    return total;
+  },
+});
+
+// Sets the currently active walker on the runway.
+export const setActiveWalker = mutation({
+  args: { userId: v.union(v.id("users"), v.null()) },
+  handler: async (ctx, { userId }) => {
+    const existing = await ctx.db.query("activeWalker").collect();
+    for (const doc of existing) {
+      await ctx.db.delete(doc._id);
+    }
+    if (userId) {
+      await ctx.db.insert("activeWalker", { userId });
+    }
+  },
+});
+
+// Returns details of the currently active walker.
+export const getActiveWalker = query({
+  args: {},
+  handler: async (ctx) => {
+    const doc = await ctx.db.query("activeWalker").first();
+    if (!doc || !doc.userId) return null;
+    const user = await ctx.db.get(doc.userId);
+    if (!user) return null;
+    return { id: user._id, username: user.username };
+  },
+});
+

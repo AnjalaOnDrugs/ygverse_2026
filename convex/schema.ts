@@ -76,4 +76,8 @@ export default defineSchema({
     .index("by_user", ["userId"])
     .index("by_user_read", ["userId", "read"])
     .index("by_image", ["imageId"]),
+
+  activeWalker: defineTable({
+    userId: v.union(v.id("users"), v.null()),
+  }),
 });
